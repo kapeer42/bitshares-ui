@@ -15,7 +15,7 @@ import AssetActions from "actions/AssetActions";
 import MarketsActions from "actions/MarketsActions";
 import cnames from "classnames";
 import {debounce} from "lodash-es";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetSelector from "../Utility/AssetSelectorStyleGuide";
 import counterpart from "counterpart";
 import LoadingIndicator from "../LoadingIndicator";
 import {ChainValidation, ChainStore} from "bitsharesjs";
@@ -1009,9 +1009,6 @@ class MyMarkets extends React.Component {
                                 <tr style={{width: "100%"}}>
                                     <td>
                                         <AssetSelector
-                                            onAssetSelect={this._onFoundBaseAsset.bind(
-                                                this
-                                            )}
                                             assets={defaultBases}
                                             onChange={this._onInputBaseAsset.bind(
                                                 this
@@ -1020,11 +1017,7 @@ class MyMarkets extends React.Component {
                                             assetInput={
                                                 this.state.findBaseInput
                                             }
-                                            tabIndex={1}
-                                            style={{
-                                                width: "100%",
-                                                paddingBottom: "1.5rem"
-                                            }}
+                                            style={{paddingBottom: "1.5rem"}}
                                             onFound={this._onFoundBaseAsset.bind(
                                                 this
                                             )}

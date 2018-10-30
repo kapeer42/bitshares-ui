@@ -529,7 +529,7 @@ class WithdrawModalNew extends React.Component {
         );
     }
 
-    onAssetSelected(value, asset) {
+    onAssetSelected(value, asset = {}) {
         let {selectedAsset, selectedGateway} = _onAssetSelected.call(
             this,
             value,

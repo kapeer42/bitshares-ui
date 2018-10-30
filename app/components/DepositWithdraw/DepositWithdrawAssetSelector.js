@@ -2,8 +2,8 @@ import React from "react";
 import {connect} from "alt-react";
 import BindToChainState from "../Utility/BindToChainState";
 import GatewayStore from "stores/GatewayStore";
-import TypeAhead from "../Utility/TypeAhead";
 import counterpart from "counterpart";
+import AssetSelector from "../Utility/AssetSelectorStyleGuide";
 
 class DepositWithdrawAssetSelector extends React.Component {
     constructor(props) {
@@ -66,24 +66,29 @@ class DepositWithdrawAssetSelector extends React.Component {
                 : "gateway.asset_search_deposit";
 
         return (
-            <TypeAhead
-                items={coinItems}
-                {...this.props}
-                inputProps={{placeholder: counterpart.translate(i18n)}}
+            <AssetSelector
+                style={{width: "100%"}}
+                assets={coinItems.map(({label}) => label)}
+                placeholder={counterpart.translate(i18n)}
+                asset={this.props.defaultValue}
                 label="gateway.asset"
+                {...this.props}
             />
         );
     }
 }
 DepositWithdrawAssetSelector = BindToChainState(DepositWithdrawAssetSelector);
 
-export default connect(DepositWithdrawAssetSelector, {
-    listenTo() {
-        return [GatewayStore];
-    },
-    getProps() {
-        return {
-            backedCoins: GatewayStore.getState().backedCoins
-        };
+export default connect(
+    DepositWithdrawAssetSelector,
+    {
+        listenTo() {
+            return [GatewayStore];
+        },
+        getProps() {
+            return {
+                backedCoins: GatewayStore.getState().backedCoins
+            };
+        }
     }
-});
+);

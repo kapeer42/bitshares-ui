@@ -9,7 +9,7 @@ import FormattedAsset from "../Utility/FormattedAsset";
 import counterpart from "counterpart";
 import ChainTypes from "../Utility/ChainTypes";
 import BindToChainState from "../Utility/BindToChainState";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetSelector from "../Utility/AssetSelectorStyleGuide";
 import big from "bignumber.js";
 import cnames from "classnames";
 import assetUtils from "common/asset_utils";
@@ -45,11 +45,18 @@ class BitAssetOptions extends React.Component {
     _onInputBackingAsset(asset) {
         if (this.props.disableBackingAssetChange)
             this.props.disabledBackingAssetChangeCallback();
-        else
-            this.setState({
-                backingAsset: asset.toUpperCase(),
-                error: null
-            });
+        else {
+            const backingAsset = asset.toUpperCase();
+            this.setState(
+                {
+                    backingAsset,
+                    error: null
+                },
+                () =>
+                    backingAsset !== "BTS" &&
+                    this.props.onUpdate("invalid", true)
+            );
+        }
     }
 
     _onFoundBackingAsset(asset) {
