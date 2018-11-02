@@ -67,6 +67,7 @@ class DepositWithdrawAssetSelector extends React.Component {
 
         return (
             <AssetSelector
+                selectMode
                 style={{width: "100%"}}
                 assets={coinItems.map(({label}) => label)}
                 placeholder={counterpart.translate(i18n)}
