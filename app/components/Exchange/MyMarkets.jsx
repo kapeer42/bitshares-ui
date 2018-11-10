@@ -15,7 +15,7 @@ import AssetActions from "actions/AssetActions";
 import MarketsActions from "actions/MarketsActions";
 import cnames from "classnames";
 import {debounce} from "lodash-es";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetSelect from "../Utility/AssetSelect";
 import counterpart from "counterpart";
 import LoadingIndicator from "../LoadingIndicator";
 import {ChainValidation, ChainStore} from "bitsharesjs";
@@ -335,7 +335,6 @@ class MyMarkets extends React.Component {
             lookupBase: null,
             inputValue: "",
             minWidth: "100%",
-            findBaseInput: "USD",
             activeFindBase: "USD"
         };
 
@@ -559,16 +558,9 @@ class MyMarkets extends React.Component {
         });
     }
 
-    _onInputBaseAsset(asset) {
-        this.setState({
-            findBaseInput: asset.toUpperCase(),
-            error: null
-        });
-    }
-
     _onFoundBaseAsset(asset) {
         if (asset) {
-            this.setState({activeFindBase: asset.get("symbol")});
+            this.setState({activeFindBase: asset});
         }
     }
 
@@ -1008,28 +1000,15 @@ class MyMarkets extends React.Component {
                             <tbody>
                                 <tr style={{width: "100%"}}>
                                     <td>
-                                        <AssetSelector
-                                            onAssetSelect={this._onFoundBaseAsset.bind(
-                                                this
-                                            )}
+                                        <AssetSelect
                                             assets={defaultBases}
-                                            onChange={this._onInputBaseAsset.bind(
-                                                this
-                                            )}
-                                            asset={this.state.findBaseInput}
-                                            assetInput={
-                                                this.state.findBaseInput
-                                            }
-                                            tabIndex={1}
-                                            style={{
-                                                width: "100%",
-                                                paddingBottom: "1.5rem"
-                                            }}
+                                            style={{paddingBottom: "1.5rem"}}
                                             onFound={this._onFoundBaseAsset.bind(
                                                 this
                                             )}
+                                            defaultValue="USD"
                                             label="exchange.quote"
-                                            noLabel
+                                            selectStyle={{width: "100%"}}
                                             inputStyle={{fontSize: "0.9rem"}}
                                         />
                                     </td>

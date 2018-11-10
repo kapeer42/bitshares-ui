@@ -2,8 +2,8 @@ import React from "react";
 import {connect} from "alt-react";
 import BindToChainState from "../Utility/BindToChainState";
 import GatewayStore from "stores/GatewayStore";
-import TypeAhead from "../Utility/TypeAhead";
 import counterpart from "counterpart";
+import AssetSelect from "../Utility/AssetSelect";
 
 class DepositWithdrawAssetSelector extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class DepositWithdrawAssetSelector extends React.Component {
 
     render() {
         const {props} = this;
-        const {include} = props;
+        const {include, defaultValue} = props;
         let idMap = {};
 
         let getCoinOption = item => {
@@ -64,26 +64,31 @@ class DepositWithdrawAssetSelector extends React.Component {
             props.usageContext == "withdraw"
                 ? "gateway.asset_search_withdraw"
                 : "gateway.asset_search_deposit";
-
         return (
-            <TypeAhead
-                items={coinItems}
-                {...this.props}
-                inputProps={{placeholder: counterpart.translate(i18n)}}
+            <AssetSelect
+                style={{width: "100%"}}
+                selectStyle={{width: "100%"}}
+                assets={coinItems.map(({label}) => label)}
+                placeholder={counterpart.translate(i18n)}
+                value={defaultValue || undefined}
                 label="gateway.asset"
+                {...props}
             />
         );
     }
 }
 DepositWithdrawAssetSelector = BindToChainState(DepositWithdrawAssetSelector);
 
-export default connect(DepositWithdrawAssetSelector, {
-    listenTo() {
-        return [GatewayStore];
-    },
-    getProps() {
-        return {
-            backedCoins: GatewayStore.getState().backedCoins
-        };
+export default connect(
+    DepositWithdrawAssetSelector,
+    {
+        listenTo() {
+            return [GatewayStore];
+        },
+        getProps() {
+            return {
+                backedCoins: GatewayStore.getState().backedCoins
+            };
+        }
     }
-});
+);

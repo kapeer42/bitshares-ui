@@ -12,7 +12,7 @@ import BindToChainState from "../Utility/BindToChainState";
 import AssetWrapper from "../Utility/AssetWrapper";
 import AmountSelector from "../Utility/AmountSelector";
 import FormattedPrice from "../Utility/FormattedPrice";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetInput from "../Utility/AssetInput";
 import big from "bignumber.js";
 import cnames from "classnames";
 import assetUtils from "common/asset_utils";
@@ -1011,21 +1011,16 @@ class AccountAssetUpdate extends React.Component {
                                         <div className="grid-block no-margin">
                                             {cerValid ? null : (
                                                 <div className="grid-block no-margin small-12 medium-6">
-                                                    <AssetSelector
+                                                    <AssetInput
                                                         label="account.user_issued_assets.quote_name"
                                                         onChange={this._onInputCoreAsset.bind(
                                                             this,
                                                             "quote"
                                                         )}
-                                                        asset={
+                                                        value={
                                                             this.state
                                                                 .quoteAssetInput
                                                         }
-                                                        assetInput={
-                                                            this.state
-                                                                .quoteAssetInput
-                                                        }
-                                                        tabIndex={1}
                                                         style={{
                                                             width: "100%",
                                                             paddingRight: "10px"
@@ -1039,21 +1034,16 @@ class AccountAssetUpdate extends React.Component {
                                             )}
                                             {cerValid ? null : (
                                                 <div className="grid-block no-margin small-12 medium-6">
-                                                    <AssetSelector
+                                                    <AssetInput
                                                         label="account.user_issued_assets.base_name"
                                                         onChange={this._onInputCoreAsset.bind(
                                                             this,
                                                             "base"
                                                         )}
-                                                        asset={
+                                                        value={
                                                             this.state
                                                                 .baseAssetInput
                                                         }
-                                                        assetInput={
-                                                            this.state
-                                                                .baseAssetInput
-                                                        }
-                                                        tabIndex={1}
                                                         style={{
                                                             width: "100%",
                                                             paddingLeft: "10px"
@@ -1256,14 +1246,13 @@ class AccountAssetUpdate extends React.Component {
                                         component="h3"
                                         content="account.user_issued_assets.market"
                                     />
-                                    <AssetSelector
+                                    <AssetInput
                                         label="account.user_issued_assets.name"
                                         onChange={this._onInputMarket.bind(
                                             this
                                         )}
                                         placeholder={asset_description.market}
-                                        asset={this.state.marketInput}
-                                        assetInput={this.state.marketInput}
+                                        value={this.state.marketInput}
                                         style={{
                                             width: "100%",
                                             paddingRight: "10px",

@@ -3,12 +3,13 @@ import LinkToAccountById from "../Utility/LinkToAccountById";
 import LinkToAssetById from "../Utility/LinkToAssetById";
 import Icon from "../Icon/Icon";
 import AccountSelector from "../Account/AccountSelector";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetInput from "../Utility/AssetInput";
 import cnames from "classnames";
 import Translate from "react-translate-component";
 import {connect} from "alt-react";
 import SettingsStore from "stores/SettingsStore";
 import SettingsActions from "actions/SettingsActions";
+import {Form} from "bitshares-ui-style-guide";
 
 class AssetWhitelist extends React.Component {
     constructor(props) {
@@ -23,7 +24,6 @@ class AssetWhitelist extends React.Component {
                 "whitelist_markets",
                 "blacklist_markets"
             ],
-            assetInput: null,
             asset_id: null
         };
     }
@@ -110,12 +110,6 @@ class AssetWhitelist extends React.Component {
         );
     }
 
-    _onAssetChange(asset) {
-        this.setState({
-            assetInput: asset
-        });
-    }
-
     _onAssetFound(asset) {
         this.setState({
             asset_id: asset ? asset.get("id") : null
@@ -166,22 +160,19 @@ class AssetWhitelist extends React.Component {
                     </tbody>
                 </table>
                 <div style={{paddingTop: "2rem"}}>
-                    <AssetSelector
-                        label={`explorer.asset.whitelist.${listType}`}
-                        onChange={this._onAssetChange.bind(this)}
-                        asset={this.state.assetInput}
-                        assetInput={this.state.assetInput}
-                        tabIndex={1}
-                        style={{width: "100%"}}
-                        onFound={this._onAssetFound.bind(this)}
-                        action_label="account.perm.confirm_add"
-                        onAction={this.props.onChangeList.bind(
-                            this,
-                            listType,
-                            "add",
-                            this.state.asset_id
-                        )}
-                    />
+                    <Form layout="inline">
+                        <AssetInput
+                            label={`explorer.asset.whitelist.${listType}`}
+                            onFound={this._onAssetFound.bind(this)}
+                            actionLabel="account.perm.confirm_add"
+                            onAction={this.props.onChangeList.bind(
+                                this,
+                                listType,
+                                "add",
+                                this.state.asset_id
+                            )}
+                        />
+                    </Form>
                 </div>
             </div>
         );
@@ -239,16 +230,19 @@ class AssetWhitelist extends React.Component {
     }
 }
 
-export default connect(AssetWhitelist, {
-    listenTo() {
-        return [SettingsStore];
-    },
-    getProps() {
-        return {
-            assetWhiteListType: SettingsStore.getState().viewSettings.get(
-                "assetWhiteListType",
-                "whitelist_authorities"
-            )
-        };
+export default connect(
+    AssetWhitelist,
+    {
+        listenTo() {
+            return [SettingsStore];
+        },
+        getProps() {
+            return {
+                assetWhiteListType: SettingsStore.getState().viewSettings.get(
+                    "assetWhiteListType",
+                    "whitelist_authorities"
+                )
+            };
+        }
     }
-});
+);

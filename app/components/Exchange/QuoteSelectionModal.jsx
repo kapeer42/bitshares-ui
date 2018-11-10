@@ -1,11 +1,11 @@
 import React from "react";
 import Icon from "../Icon/Icon";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetInput from "../Utility/AssetInput";
 import SettingsActions from "actions/SettingsActions";
 import Translate from "react-translate-component";
 import counterpart from "counterpart";
 
-import {Modal, Button} from "bitshares-ui-style-guide";
+import {Modal, Button, Form} from "bitshares-ui-style-guide";
 
 export default class QuoteSelectionModal extends React.Component {
     constructor() {
@@ -49,6 +49,7 @@ export default class QuoteSelectionModal extends React.Component {
             SettingsActions.modifyPreferedBases({
                 add: quote.get("symbol")
             });
+            this.setState({backingAsset: ""});
         }
     }
 
@@ -60,8 +61,10 @@ export default class QuoteSelectionModal extends React.Component {
     }
 
     _onFoundBackingAsset(asset) {
+        console.log("ofba", asset);
         if (asset) {
             if (!this.props.quotes.includes(asset.get("symbol"))) {
+                console.log("isValid");
                 this.setState({isValid: true});
             } else {
                 this.setState({
@@ -73,7 +76,7 @@ export default class QuoteSelectionModal extends React.Component {
     }
 
     render() {
-        const {error} = this.state;
+        const {error, isValid} = this.state;
         const quoteCount = this.props.quotes.size;
         return (
             <Modal
@@ -157,23 +160,17 @@ export default class QuoteSelectionModal extends React.Component {
                     </table>
 
                     <br />
-
-                    <div>
-                        <AssetSelector
-                            label="exchange.custom_quote"
-                            onChange={this._onInputBackingAsset.bind(this)}
-                            asset={this.state.backingAsset}
-                            assetInput={this.state.backingAsset}
-                            tabIndex={1}
-                            style={{width: "100%", paddingRight: "10px"}}
-                            onFound={this._onFoundBackingAsset.bind(this)}
-                            onAction={this._onAdd.bind(this)}
-                            action_label="exchange.add_quote"
-                            disableActionButton={!!error}
-                            noLabel
-                        />
-                        <div className="error-area">{error}</div>
-                    </div>
+                    <AssetInput
+                        label="exchange.custom_quote"
+                        style={{width: "100%", paddingRight: "10px"}}
+                        onFound={this._onFoundBackingAsset.bind(this)}
+                        onChange={this._onInputBackingAsset.bind(this)}
+                        value={this.state.backingAsset}
+                        onAction={this._onAdd.bind(this)}
+                        actionLabel="exchange.add_quote"
+                        validateStatus={!isValid ? "error" : undefined}
+                        help={!isValid ? error : undefined}
+                    />
                 </section>
             </Modal>
         );

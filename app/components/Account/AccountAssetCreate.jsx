@@ -9,7 +9,7 @@ import FormattedAsset from "../Utility/FormattedAsset";
 import counterpart from "counterpart";
 import ChainTypes from "../Utility/ChainTypes";
 import BindToChainState from "../Utility/BindToChainState";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetInput from "../Utility/AssetInput";
 import big from "bignumber.js";
 import cnames from "classnames";
 import assetUtils from "common/asset_utils";
@@ -45,14 +45,23 @@ class BitAssetOptions extends React.Component {
     _onInputBackingAsset(asset) {
         if (this.props.disableBackingAssetChange)
             this.props.disabledBackingAssetChangeCallback();
-        else
-            this.setState({
-                backingAsset: asset.toUpperCase(),
-                error: null
-            });
+        else {
+            const backingAsset = asset.toUpperCase();
+            console.log("_onInputBackingAsset", backingAsset);
+            this.setState(
+                {
+                    backingAsset,
+                    error: null
+                },
+                () =>
+                    backingAsset !== "BTS" &&
+                    this.props.onUpdate("invalid", true)
+            );
+        }
     }
 
     _onFoundBackingAsset(asset) {
+        console.log("_onFoundBackingAsset", asset);
         if (asset) {
             let backing =
                 asset.get("bitasset") &&
@@ -179,13 +188,10 @@ class BitAssetOptions extends React.Component {
                 </label>
 
                 <div className="grid-block no-margin small-12">
-                    <AssetSelector
+                    <AssetInput
                         label="account.user_issued_assets.backing"
-                        onChange={this._onInputBackingAsset.bind(this)}
-                        asset={this.state.backingAsset}
-                        assetInput={this.state.backingAsset}
-                        tabIndex={1}
-                        style={{width: "100%", paddingRight: "10px"}}
+                        style={{width: "100%", maxWidth: "none"}}
+                        defaultValue={"BTS"}
                         onFound={this._onFoundBackingAsset.bind(this)}
                     />
                     {error ? (
@@ -626,6 +632,7 @@ class AccountAssetCreate extends React.Component {
     }
 
     _onFoundMarketAsset(asset) {
+        console.log("onFoundMarketAsset", asset);
         if (asset) {
             this._onUpdateDescription("market", asset.get("symbol"));
         }
@@ -1144,17 +1151,9 @@ class AccountAssetCreate extends React.Component {
                                         component="label"
                                         content="account.user_issued_assets.market"
                                     />
-                                    <AssetSelector
+                                    <AssetInput
                                         label="account.user_issued_assets.name"
-                                        onChange={this._onInputMarket.bind(
-                                            this
-                                        )}
-                                        asset={this.state.marketInput}
-                                        assetInput={this.state.marketInput}
-                                        style={{
-                                            width: "100%",
-                                            paddingRight: "10px"
-                                        }}
+                                        placeholder="Symbol"
                                         onFound={this._onFoundMarketAsset.bind(
                                             this
                                         )}
