@@ -9,7 +9,7 @@ import FormattedAsset from "../Utility/FormattedAsset";
 import counterpart from "counterpart";
 import ChainTypes from "../Utility/ChainTypes";
 import BindToChainState from "../Utility/BindToChainState";
-import AssetSelector from "../Utility/AssetSelector";
+import AssetInput from "../Utility/AssetInput";
 import big from "bignumber.js";
 import cnames from "classnames";
 import assetUtils from "common/asset_utils";
@@ -45,11 +45,13 @@ class BitAssetOptions extends React.Component {
     _onInputBackingAsset(asset) {
         if (this.props.disableBackingAssetChange)
             this.props.disabledBackingAssetChangeCallback();
-        else
+        else {
+            this.props.onUpdate("invalid", true);
             this.setState({
                 backingAsset: asset.toUpperCase(),
                 error: null
             });
+        }
     }
 
     _onFoundBackingAsset(asset) {
@@ -179,13 +181,10 @@ class BitAssetOptions extends React.Component {
                 </label>
 
                 <div className="grid-block no-margin small-12">
-                    <AssetSelector
+                    <AssetInput
                         label="account.user_issued_assets.backing"
-                        onChange={this._onInputBackingAsset.bind(this)}
-                        asset={this.state.backingAsset}
-                        assetInput={this.state.backingAsset}
-                        tabIndex={1}
-                        style={{width: "100%", paddingRight: "10px"}}
+                        style={{width: "100%", maxWidth: "none"}}
+                        defaultValue={"BTS"}
                         onFound={this._onFoundBackingAsset.bind(this)}
                     />
                     {error ? (
@@ -558,10 +557,10 @@ class AccountAssetCreate extends React.Component {
                     : new big(new_state.max_supply)
                           .times(Math.pow(10, new_state.precision))
                           .gt(GRAPHENE_MAX_SHARE_SUPPLY)
-                        ? counterpart.translate(
-                              "account.user_issued_assets.too_large"
-                          )
-                        : null;
+                    ? counterpart.translate(
+                          "account.user_issued_assets.too_large"
+                      )
+                    : null;
         } catch (err) {
             console.log("err:", err);
             errors.max_supply = counterpart.translate(
@@ -780,8 +779,8 @@ class AccountAssetCreate extends React.Component {
                 update.description.visible
                     ? false
                     : update.description.visible === false
-                        ? true
-                        : false
+                    ? true
+                    : false
             )
         );
 
@@ -1140,24 +1139,16 @@ class AccountAssetCreate extends React.Component {
                                         />
                                     </label>
 
-                                    <Translate
-                                        component="label"
-                                        content="account.user_issued_assets.market"
-                                    />
-                                    <AssetSelector
-                                        label="account.user_issued_assets.name"
-                                        onChange={this._onInputMarket.bind(
-                                            this
-                                        )}
-                                        asset={this.state.marketInput}
-                                        assetInput={this.state.marketInput}
-                                        style={{
-                                            width: "100%",
-                                            paddingRight: "10px"
-                                        }}
+                                    <AssetInput
+                                        label="account.user_issued_assets.market"
+                                        placeholder="account.user_issued_assets.name"
                                         onFound={this._onFoundMarketAsset.bind(
                                             this
                                         )}
+                                        onChange={this._onInputMarket.bind(
+                                            this
+                                        )}
+                                        value={this.state.marketInput}
                                     />
 
                                     {is_prediction_market ? (

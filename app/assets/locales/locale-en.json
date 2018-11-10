@@ -1274,6 +1274,9 @@
             "key_approval_remove": "Key approval to remove",
             "pay_with": "Pay with account"
         },
+        "quote_selection": {
+            "already_used": "Asset already being used"
+        },
         "qrcode": {
             "input_message": "Please enter a password used to encrypt the QR code.<br />An empty password will show an unencrypted QR code.",
             "label": "qrcode",
